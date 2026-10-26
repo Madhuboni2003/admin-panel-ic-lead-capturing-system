@@ -22,7 +22,7 @@ const AdminShell: FC<AdminShellProps> = ({ children }) => {
     <div className="min-h-screen bg-(--builder-bg) text-(--builder-text)">
       <header className="mx-auto flex w-[min(1280px,94%)] flex-wrap items-center justify-between gap-4 py-5">
         <div className="flex flex-wrap items-center gap-7">
-          <Link href="/" className="text-[22px] font-black tracking-[-0.5px] text-[#020617]">
+          <Link href="/dashboard" className="text-[22px] font-black tracking-[-0.5px] text-[#020617]">
             Interview<span className="text-(--builder-blue)">Call</span>
           </Link>
 
