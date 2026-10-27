@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC,useState } from 'react';
+
+import CreateUserModal from '@/components/dashboard/CreateUserModal';
 
 const HomePage: FC = () => {
+  const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_10%_10%,rgba(37,99,235,0.10),transparent_32%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-8 text-(--builder-text) max-sm:px-3">
       <div className="mx-auto w-[min(1180px,92%)]">
@@ -17,9 +22,22 @@ const HomePage: FC = () => {
             </p>
           </div>
 
-          <div className="rounded-full bg-[#dcfce7] px-4 py-2 text-sm font-black text-[#166534]">
-            Admin Panel
+          
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsCreateUserOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
+            >
+              <span aria-hidden="true">+</span>
+              Create User
+            </button>
+
+            <div className="rounded-full bg-[#dcfce7] px-4 py-2 text-sm font-black text-[#166534]">
+              Admin Panel
+            </div>
           </div>
+
         </header>
 
         <section className="mb-8 overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#1d4ed8,#0f172a)] p-8 text-white shadow-(--builder-shadow) max-sm:p-6">
@@ -103,6 +121,10 @@ const HomePage: FC = () => {
           </Link>
         </section>
       </div>
+        <CreateUserModal
+          isOpen={isCreateUserOpen}
+          onClose={() => setIsCreateUserOpen(false)}
+        />
     </main>
   );
 };
