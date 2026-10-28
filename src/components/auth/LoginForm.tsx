@@ -33,16 +33,13 @@ const LoginForm: FC = () => {
     try {
         const result = await login(values);
 
-        if (
-            result.requiresPasswordReset ||
-            result.tokenType !== 'access'
-        ) {
-            toast.warning(
-                'Password reset is required, but the reset page is not available yet. Please contact your administrator.',
-            );
+        if (result.requiresPasswordReset) {
+            router.replace('/reset-password');
             return;
         }
 
+        sessionStorage.setItem('user-role', result.user.role);
+        
         router.replace('/dashboard');
     } catch {
         // The useLogin hook displays the error toast.

@@ -20,3 +20,15 @@ export type LoginResponseData =
           tokenType: 'access';
           user: AuthenticatedUser;
       };
+
+
+export type ResetPasswordCredentials = {
+    newPassword: string;
+    confirmPassword: string;
+};
+
+export type ResetPasswordResponseData = {
+    passwordReset: true;
+    isActive: true;
+    message: string;
+};

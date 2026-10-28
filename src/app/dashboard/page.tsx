@@ -1,12 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { FC,useState } from 'react';
+import { FC,useState , useEffect } from 'react';
 
 import CreateUserModal from '@/components/dashboard/CreateUserModal';
 
 const HomePage: FC = () => {
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [userRole, setUserRole] = useState<'ADMIN' | 'MANAGER' | null>(null);
+
+  useEffect(() => {
+      const role = sessionStorage.getItem('user-role');
+
+      if (role === 'ADMIN' || role === 'MANAGER') {
+          setUserRole(role);
+      }
+  }, []);
+
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_10%_10%,rgba(37,99,235,0.10),transparent_32%),linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-4 py-8 text-(--builder-text) max-sm:px-3">
       <div className="mx-auto w-[min(1180px,92%)]">
@@ -24,17 +34,19 @@ const HomePage: FC = () => {
 
           
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsCreateUserOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
-            >
-              <span aria-hidden="true">+</span>
-              Create User
-            </button>
+            {userRole === 'ADMIN' && (
+              <button
+                  type="button"
+                  onClick={() => setIsCreateUserOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700"
+              >
+                  <span aria-hidden="true">+</span>
+                  Create User
+              </button>
+          )}
 
             <div className="rounded-full bg-[#dcfce7] px-4 py-2 text-sm font-black text-[#166534]">
-              Admin Panel
+              {userRole === 'MANAGER' ? 'Manager Panel' : 'Admin Panel'}
             </div>
           </div>
 
@@ -55,28 +67,32 @@ const HomePage: FC = () => {
           </p>
         </section>
 
-        <section className="grid grid-cols-3 gap-5 max-lg:grid-cols-1">
-          <Link
-            href="/form-builder"
-            className="group rounded-3xl border border-(--builder-border) bg-white p-6 shadow-(--builder-shadow) transition duration-200 hover:-translate-y-1 hover:border-(--builder-blue) hover:shadow-[0_28px_80px_rgba(15,23,42,0.14)]"
-          >
-            <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-[#eff6ff] text-2xl">
-              🧩
-            </div>
+        <section
+            className={`grid ${userRole === 'MANAGER' ? 'grid-cols-2' : 'grid-cols-3'} gap-5 max-lg:grid-cols-1`}
+        >
+          {userRole === 'ADMIN' && (
+            <Link
+              href="/form-builder"
+              className="group rounded-3xl border border-(--builder-border) bg-white p-6 shadow-(--builder-shadow) transition duration-200 hover:-translate-y-1 hover:border-(--builder-blue) hover:shadow-[0_28px_80px_rgba(15,23,42,0.14)]"
+            >
+              <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-[#eff6ff] text-2xl">
+                🧩
+              </div>
 
-            <h2 className="text-xl font-black tracking-[-0.3px] text-[#020617]">
-              Form Builder
-            </h2>
+              <h2 className="text-xl font-black tracking-[-0.3px] text-[#020617]">
+                Form Builder
+              </h2>
 
-            <p className="mt-2 text-sm font-semibold leading-6 text-(--builder-muted)">
-              Create qualification forms, add step-wise questions, and preview
-              the final payload.
-            </p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-(--builder-muted)">
+                Create qualification forms, add step-wise questions, and preview
+                the final payload.
+              </p>
 
-            <div className="mt-5 text-sm font-black text-(--builder-blue) transition group-hover:translate-x-1">
-              Open Builder →
-            </div>
-          </Link>
+              <div className="mt-5 text-sm font-black text-(--builder-blue) transition group-hover:translate-x-1">
+                Open Builder →
+              </div>
+            </Link>
+          )}
 
           <Link
             href="/submissions"

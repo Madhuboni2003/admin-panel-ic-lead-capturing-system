@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 
 const NAV_ITEMS = [
   { href: '/form-builder', label: 'Form Builder' },
@@ -18,6 +18,16 @@ type AdminShellProps = {
 const AdminShell: FC<AdminShellProps> = ({ children }) => {
   const pathname = usePathname();
 
+  const [userRole, setUserRole] = useState<'ADMIN' | 'MANAGER' | null>(null);
+
+  useEffect(() => {
+      const role = sessionStorage.getItem('user-role');
+
+      if (role === 'ADMIN' || role === 'MANAGER') {
+          setUserRole(role);
+      }
+  }, []);
+
   return (
     <div className="min-h-screen bg-(--builder-bg) text-(--builder-text)">
       <header className="mx-auto flex w-[min(1280px,94%)] flex-wrap items-center justify-between gap-4 py-5">
@@ -27,7 +37,9 @@ const AdminShell: FC<AdminShellProps> = ({ children }) => {
           </Link>
 
           <nav aria-label="Admin sections" className="flex flex-wrap gap-1.5">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.filter(
+                (item) => userRole === 'ADMIN' || item.href !== '/form-builder',
+            ).map((item) => {
               const isActive = pathname.startsWith(item.href);
 
               return (
@@ -50,7 +62,7 @@ const AdminShell: FC<AdminShellProps> = ({ children }) => {
         </div>
 
         <div className="rounded-full bg-[#dcfce7] px-4 py-2 text-[13px] font-black text-[#166534]">
-          Admin Panel
+          {userRole === 'MANAGER' ? 'Manager Panel' : 'Admin Panel'}
         </div>
       </header>
 
