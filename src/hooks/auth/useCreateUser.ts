@@ -1,25 +1,22 @@
-
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-import {
-    createUserInvitationApi,
-    CreateUserInvitationResponse,
-} from '@/services/userApi';
-import { CreateUserFormValues } from '@/schemas/createUserSchema';
-import { ApiErrorResponse } from '@/types/response';
+import { createUserApi } from '@/services/userApi';
+import type { CreateUserFormValues } from '@/schemas/createUserSchema';
+import type { ApiErrorResponse } from '@/types/response';
+import type { CreateUserResponseData } from '@/types/user';
 
 export function useCreateUser() {
     return useMutation<
-        CreateUserInvitationResponse,
+        CreateUserResponseData,
         AxiosError<ApiErrorResponse>,
         CreateUserFormValues
     >({
-        mutationFn: createUserInvitationApi,
+        mutationFn: createUserApi,
 
-        onSuccess: (response) => {
-            toast.success(response.message || 'User created successfully.');
+        onSuccess: () => {
+            toast.success('User created successfully.');
         },
 
         onError: (error) => {

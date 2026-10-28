@@ -1,46 +1,23 @@
-
 import { userApiClient } from '@/lib/userApiClient';
-import type { Role } from '@/constants/roles';
 import type { CreateUserFormValues } from '@/schemas/createUserSchema';
+import type { CreateUserRequest } from '@/types/request';
 import type { ApiSuccessResponse } from '@/types/response';
+import type { CreateUserResponseData } from '@/types/user';
 
-export type CreatedUser = {
-    id: number;
-    fullName: string;
-    email: string;
-    phoneNo: string;
-    role: Role;
-    isActive?: boolean;
-};
-
-export type CreateUserInvitationResponse =
-    ApiSuccessResponse<CreatedUser>;
-
-// Create a user invitation through User-Service.
-export async function createUserInvitationApi(
+// POST /users: create an ADMIN or MANAGER account.
+export async function createUserApi(
     payload: CreateUserFormValues,
-): Promise<CreateUserInvitationResponse> {
-    // Read the JWT saved by the existing login flow.
-    const token =
-        typeof window !== 'undefined'
-            ? localStorage.getItem('user-service-token')
-            : null;
+): Promise<CreateUserResponseData> {
+    const requestData: CreateUserRequest = {
+        name: payload.fullName,
+        email: payload.email,
+        phoneNo: payload.phoneNo,
+        role: payload.role,
+    };
 
-    if (!token) {
-        throw new Error('Session expired. Please sign in again.');
-    }
+    const response = await userApiClient.post<
+        ApiSuccessResponse<CreateUserResponseData>
+    >('/users', requestData);
 
-    // Send the invitation request with the authenticated Admin's token.
-    const response =
-        await userApiClient.post<CreateUserInvitationResponse>(
-            '/users/invitations',
-            payload,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            },
-        );
-
-    return response.data;
+    return response.data.data;
 }

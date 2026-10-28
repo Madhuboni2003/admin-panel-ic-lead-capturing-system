@@ -1,7 +1,6 @@
-
 export const ROLE = {
-    ADMIN: 'admin',
-    MANAGER: 'manager',
+    ADMIN: 'ADMIN',
+    MANAGER: 'MANAGER',
 } as const;
 
 export const ROLE_OPTIONS = [ROLE.ADMIN, ROLE.MANAGER] as const;

@@ -21,7 +21,7 @@ type Props = {
 const fields = [
     { name: 'fullName', label: 'Name', type: 'text', placeholder: 'Full name' },
     { name: 'email', label: 'Email', type: 'email', placeholder: 'Email address' },
-    { name: 'phoneNo', label: 'Phone Number', type: 'tel', placeholder: '10-digit mobile number' },
+    { name: 'phoneNo', label: 'Phone Number', type: 'tel', placeholder: 'Phone number (include country code if needed)' },
 ] as const;
 
 const inputClass =

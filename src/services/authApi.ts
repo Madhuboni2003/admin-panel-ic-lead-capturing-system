@@ -1,18 +1,13 @@
-
 import { userApiClient } from '@/lib/userApiClient';
-import { ApiSuccessResponse } from '@/types/response';
+import type { LoginCredentials, LoginResponseData } from '@/types/auth';
+import type { ApiSuccessResponse } from '@/types/response';
 
-export type LoginCredentials = {
-    email: string;
-    password: string;
-};
-
-// Authenticate the user and return the JWT issued by User-Service.
-export async function loginApi(credentials: LoginCredentials): Promise<string> {
-    const response = await userApiClient.post<ApiSuccessResponse<string>>(
-        '/auth/login',
-        credentials,
-    );
+export async function loginApi(
+    credentials: LoginCredentials,
+): Promise<LoginResponseData> {
+    const response = await userApiClient.post<
+        ApiSuccessResponse<LoginResponseData>
+    >('/auth/login', credentials);
 
     return response.data.data;
 }

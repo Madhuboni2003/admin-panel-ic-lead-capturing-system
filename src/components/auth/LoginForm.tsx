@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
+import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
@@ -28,17 +29,25 @@ const LoginForm: FC = () => {
     });
 
     // Authenticate the user, save the JWT, and redirect to the dashboard.
-    const submitLogin = async (values: LoginFormValues): Promise<void> => {
-        try {
-            const token = await login(values);
+   const submitLogin = async (values: LoginFormValues): Promise<void> => {
+    try {
+        const result = await login(values);
 
-            localStorage.setItem('user-service-token', token);
-
-            router.replace('/dashboard');
-        } catch {
-            // The useLogin hook displays the error toast.
+        if (
+            result.requiresPasswordReset ||
+            result.tokenType !== 'access'
+        ) {
+            toast.warning(
+                'Password reset is required, but the reset page is not available yet. Please contact your administrator.',
+            );
+            return;
         }
-    };
+
+        router.replace('/dashboard');
+    } catch {
+        // The useLogin hook displays the error toast.
+    }
+};
 
     return (
         <main className="grid min-h-screen grid-cols-1 bg-white lg:grid-cols-2">

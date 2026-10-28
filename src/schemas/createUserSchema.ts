@@ -7,7 +7,7 @@ export const createUserSchema = z.object({
         .string()
         .trim()
         .min(2, 'Name must contain at least 2 characters.')
-        .max(50, 'Name cannot exceed 50 characters.'),
+        .max(100, 'Name cannot exceed 100 characters.'),
 
     email: z
         .string()
@@ -18,8 +18,8 @@ export const createUserSchema = z.object({
         .string()
         .trim()
         .regex(
-            /^[6-9]\d{9}$/,
-            'Enter a valid 10-digit Indian mobile number.',
+            /^\+?[1-9]\d{7,14}$/,
+            'Enter a valid phone number, including country code if required.',
         ),
 
     role: z.enum(ROLE_OPTIONS),
